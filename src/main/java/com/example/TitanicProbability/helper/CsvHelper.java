@@ -36,13 +36,13 @@ public class CsvHelper {
             for (CSVRecord csvRecord : csvRecords) {
                 Passenger passenger = new Passenger(null,
                         csvRecord.get("Survived").equals("1"),
-                        Integer.parseInt(csvRecord.get("Pclass")),
+                        Integer.valueOf(csvRecord.get("Pclass")),
                         csvRecord.get("Name"),
                         csvRecord.get("Sex"),
-                        Double.parseDouble(csvRecord.get("Age")),
-                        Integer.parseInt(csvRecord.get("Siblings/Spouses Aboard")),
-                        Integer.parseInt(csvRecord.get("Parents/Children Aboard")),
-                        Double.parseDouble(csvRecord.get("Fare")));
+                        Double.valueOf(csvRecord.get("Age")),
+                        Integer.valueOf(csvRecord.get("Siblings/Spouses Aboard")),
+                        Integer.valueOf(csvRecord.get("Parents/Children Aboard")),
+                        Double.valueOf(csvRecord.get("Fare")));
 
                 passengers.add(passenger);
             }
