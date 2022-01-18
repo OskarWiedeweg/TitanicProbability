@@ -20,10 +20,6 @@ public class PassengerService {
     @Autowired
     private PassengerRepository passengerRepository;
 
-    public List<PassengerDTO> getAllPassengers(Integer page, Integer limit) {
-        return getPassengerDTOS(page, limit, null);
-    }
-
     public List<PassengerDTO> getAllPassengers(Integer page, Integer limit, Boolean survivedIndicator, Integer passengerClass, String name, String sex, Double age, Integer siblingsAboard, Integer parentsAboard, Double fare) {
         Specification<Passenger> specification = SpecificationHelper.getSpecification(survivedIndicator, passengerClass, name, sex, age, siblingsAboard, parentsAboard, fare);
         return getPassengerDTOS(page, limit, specification);
