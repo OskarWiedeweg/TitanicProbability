@@ -1,5 +1,6 @@
 package com.example.TitanicProbability.services;
 
+import com.example.TitanicProbability.dtos.AverageClassPriceDTO;
 import com.example.TitanicProbability.dtos.PassengerDTO;
 import com.example.TitanicProbability.dtos.PercentageDTO;
 import com.example.TitanicProbability.helper.SpecificationHelper;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -60,5 +62,25 @@ public class PassengerService {
         Integer queryCount = getAllPassengersFilteredCount(survivedIndicator, passengerClass, name, sex, age, siblingsAboard, parentsAboard, fare);
 
         return new PercentageDTO(passengerCount, (long)queryCount, new BigDecimal((queryCount * 1.0 / passengerCount) * 100).setScale(2, RoundingMode.HALF_UP).doubleValue() + "%");
+    }
+
+    public AverageClassPriceDTO getAverageClassPrice(Integer passengerClass) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Double> cq = criteriaBuilder.createQuery(Double.class);
+        Root<Passenger> root = cq.from(Passenger.class);
+        cq.select(criteriaBuilder.sumAsDouble(root.get("fare")));
+        cq.where(criteriaBuilder.equal(root.get("passengerClass"), passengerClass));
+
+        Double fare = entityManager.createQuery(cq).getSingleResult();
+
+        CriteriaBuilder cbPassengerCount = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> cqPassengerCount = cbPassengerCount.createQuery(Long.class);
+        Root<Passenger> rootPassengerCount = cqPassengerCount.from(Passenger.class);
+        cqPassengerCount.select(cbPassengerCount.count(rootPassengerCount));
+        cqPassengerCount.where(cbPassengerCount.equal(rootPassengerCount.get("passengerClass"), passengerClass));
+
+        Long passengerCount= entityManager.createQuery(cqPassengerCount).getSingleResult();
+
+        return new AverageClassPriceDTO(fare, passengerCount, new BigDecimal(fare / passengerCount).setScale(2, RoundingMode.HALF_UP).doubleValue());
     }
 }
