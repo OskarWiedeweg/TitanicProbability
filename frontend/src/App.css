@@ -76,9 +76,8 @@
     cursor: pointer;
 }
 
-.pages span:hover, .query span:hover {
+.pages span:hover, .query span:hover, .query button:hover {
     background: #0097a8;
-    transition: background-color .6s;
 }
 
 .hide {
@@ -96,4 +95,31 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+.buttons span {
+    margin-right: 10px;
+}
+
+.buttons span.secondary {
+    background: #929292;
+}
+
+.query button {
+    background: #00bcd4;
+    border: none;
+    color: white;
+    padding: 8px;
+    border-radius: 10px;
+    transition: background-color .6s;
+    cursor: pointer;
+}
+
+.buttons span.secondary:hover {
+    background: #717070;
 }

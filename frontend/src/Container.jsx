@@ -1,44 +1,69 @@
 import {Query} from "./Query";
 import {Passenger} from "./Passenger";
-import React from "react";
+import React, {useEffect, useState} from "react";
+import {PageControl} from "./PageControl";
 
-export class Container extends React.Component {
+export const Container = () => {
 
-    constructor(props) {
-        super(props);
+    const [ page, setPage ] = useState(0);
+    const [ query, setQuery ] = useState({});
+    const [ loaded, setLoading ] = useState(false);
+    const [ passengers, setPassenger ] = useState({});
 
-        this.state = {
-            isLoaded: false,
-            passengers: [],
-            page: 0
+
+    let limit = null;
+
+    const fetchData = () => {
+
+        let propertyString = "?page=" + page;
+
+        if (query != null) {
+            for (const [key, value] of Object.entries(query)) {
+                if (value !== "" && value !== null)
+                    propertyString += "&" + key + "=" + value;
+            }
         }
 
-
-    }
-
-    componentDidMount() {
-        this.fetchData()
-    }
-
-    fetchData() {
-        const { page } = this.state;
-        fetch("http://localhost:8080/api/passenger?page=" + page).then(res => res.json())
+        fetch("http://localhost:8080/api/passenger" + propertyString).then(res => res.json())
             .then((result) => {
-                if (result.length === 0 && this.state.page !== 0) {
-                    this.setState({page: page - 1}, this.fetchData);
-                    this.limit = page-1;
+                if (result.length === 0 && page !== 0) {
+                    setPage(page - 1);
+                    limit = page-1;
                     return;
                 }
-                this.setState({isLoaded: true, passengers: result})
+                setPassenger(result);
+                setLoading(true);
             });
     }
 
-    render() {
-        const { isLoading, passengers } = this.state;
-        return (<div className="container">
-            <h1>Passagiere ({this.state.page + 1})</h1>
+    const pageUp = () => {
+        setPage(page + 1);
+    }
+
+    const pageDown = () => {
+        if (page === 0) return;
+        setPage(page - 1);
+    }
+
+    const performQuery = (query) => {
+        setQuery(query);
+        setPage(0);
+    }
+
+    useEffect(()=>{
+        fetchData();
+    },[])
+
+    useEffect(() => {
+        fetchData();
+    }, [page, query]);
+
+
+    return (<div className="container">
+            <h1>Passagiere ({page + 1})</h1>
             <br/>
-            <Query conainer={this} />
+            <Query query={performQuery} />
+            <PageControl page={page} pageUp={pageUp} pageDown={pageDown} limit={limit} />
             <div className="passengers">
                 <div className="passenger titles">
                     <span>M/W</span>
@@ -50,22 +75,13 @@ export class Container extends React.Component {
                     <span>Geschwister</span>
                     <span>Eltern</span>
                 </div>
-                {passengers.map(passenger => (
-                    <Passenger key={passenger.id} sex={passenger.sex} name={passenger.name} age={passenger.age} survived={passenger.survivedIndicator} class={passenger.passengerClass} fare={passenger.fare} siblings={passenger.siblingsAboard} parents={passenger.parentsAboard} />
-                ))}
+                {loaded && passengers.map(passenger => {
+                    return (<Passenger key={passenger.id} sex={passenger.sex} name={passenger.name} age={passenger.age}
+                                       survived={passenger.survivedIndicator} class={passenger.passengerClass}
+                                       fare={passenger.fare} siblings={passenger.siblingsAboard}
+                                       parents={passenger.parentsAboard}/>)
+                })}
             </div>
-            <div className="pages"><span className={this.state.page === 0 ? "hide" : ""} onClick={this.pageDown.bind(this)}>&lt;</span><p>Seite {this.state.page + 1}</p><span className={this.state.page === this.limit ? "hide" : ""} onClick={this.pageUp.bind(this)}>&gt;</span></div>
-        </div>)
-    }
-
-    pageUp() {
-        const { page } = this.state
-        this.setState({page: page + 1}, this.fetchData)
-    }
-
-    pageDown() {
-        const { page } = this.state
-        if (page === 0) return
-        this.setState({page: page - 1}, this.fetchData)
-    }
+        <PageControl page={page} pageUp={pageUp} pageDown={pageDown} limit={limit} />
+        </div>);
 }

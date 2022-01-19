@@ -1,4 +1,4 @@
-export function Passenger(props) {
+export const Passenger = (props) => {
     return (<div className="passenger">
         <span>{props.sex === 'male' ? "M" : "W"}</span>
         <span>{props.name}</span>
