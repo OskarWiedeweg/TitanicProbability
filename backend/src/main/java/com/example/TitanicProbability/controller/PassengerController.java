@@ -19,7 +19,7 @@ public class PassengerController {
     @Autowired
     private PassengerService passengerService;
 
-    @GetMapping()
+    @GetMapping("/all")
     public List<PassengerDTO> getAll(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer limit, @RequestParam(required = false) Boolean survivedIndicator, @RequestParam(required = false) Integer passengerClass, @RequestParam(required = false) String name, @RequestParam(required = false) String sex, @RequestParam(required = false) Double age, @RequestParam(required = false) Integer siblingsAboard, @RequestParam(required = false) Integer parentsAboard, @RequestParam(required = false) Double fare) {
         return passengerService.getAllPassengers(page, limit, survivedIndicator, passengerClass, name, sex, age, siblingsAboard, parentsAboard, fare);
     }
