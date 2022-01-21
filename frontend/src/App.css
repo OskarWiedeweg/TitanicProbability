@@ -16,6 +16,22 @@
     transition: all .9s;
 }
 
+.button {
+    padding: 10px;
+    align-items: center;
+    background: #00bcd4;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 700;
+    transition: background-color .6s;
+    cursor: pointer;
+    border: none;
+}
+
+.button:hover {
+    background: #0097a8;
+}
+
 .header.open {
     height: 120px;
 }
@@ -179,4 +195,35 @@
 
 .error {
     color: red;
+}
+
+
+.create {
+    display: flex;
+    transform: translateX(-400%);
+    flex-direction: column;
+    height: 0;
+    transition: all 2s;
+    border-radius: 10px;
+    width: 200px;
+}
+
+.create.open {
+    height: 300px;
+    background: white;
+    padding: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    transform: translateX(0);
+}
+
+.create input[type="text"], .create select, .create input[type="number"] {
+    margin-top: 10px;
+    height: 30px;
+    padding-left: 10px;
+    outline: none;
+}
+
+.create .button {
+    margin-top: 20px;
 }

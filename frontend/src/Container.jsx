@@ -2,6 +2,7 @@ import {Query} from "./Query";
 import {Passenger} from "./Passenger";
 import React, {useEffect, useState} from "react";
 import {PageControl} from "./PageControl";
+import {Create} from "./Create";
 
 export const Container = () => {
 
@@ -61,6 +62,7 @@ export const Container = () => {
             <h1>Passagiere ({page + 1})</h1>
             <br/>
             <Query query={performQuery} />
+                <Create fetchData={fetchData}/>
             <PageControl page={page} pageUp={pageUp} pageDown={pageDown} limit={limit} />
             <div className="passengers">
                 <div className="passenger titles">
