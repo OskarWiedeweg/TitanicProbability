@@ -44,7 +44,7 @@ public class PassengerService {
         Iterator<Passenger> passengers = passengerRepository.findAll(specification, pageable).iterator();
         List<PassengerDTO> passengerDTOS = new ArrayList<>();
 
-        passengers.forEachRemaining(passenger -> passengerDTOS.add(new PassengerDTO(passenger.getId(), passenger.getSurvivedIndicator(), passenger.getPassengerClass(), passenger.getName(), passenger.getSex(), passenger.getAge(), passenger.getSiblingsAboard(), passenger.getParentsAboard(), passenger.getFare())));
+        passengers.forEachRemaining(passenger -> passengerDTOS.add(new PassengerDTO(passenger.getId(), passenger.getSurvivedIndicator(), passenger.getPassengerClass(), passenger.getName(), passenger.getSex(), passenger.getAge(), passenger.getSiblingsAboard(), passenger.getParentsAboard(), BigDecimal.valueOf(passenger.getFare()).setScale(2, RoundingMode.HALF_UP).doubleValue())));
 
         return passengerDTOS;
     }
@@ -56,7 +56,7 @@ public class PassengerService {
         Specification<Passenger> specification = SpecificationHelper.getSpecification(survivedIndicator, passengerClass, name, sex, age, siblingsAboard, parentsAboard, fare);
         long queryCount = passengerRepository.count(specification);
 
-        return new PercentageDTO(passengerCount, queryCount, new BigDecimal((queryCount * 1.0 / passengerCount) * 100).setScale(2, RoundingMode.HALF_UP).doubleValue() + "%");
+        return new PercentageDTO(passengerCount, queryCount, BigDecimal.valueOf((queryCount * 1.0 / passengerCount) * 100).setScale(2, RoundingMode.HALF_UP).doubleValue() + "%");
     }
 
     public AverageClassPriceDTO getAverageClassPrice(Integer passengerClass) {
@@ -69,7 +69,7 @@ public class PassengerService {
     }
 
     public PassengerDTO createPassenger(PassengerDTO passenger) {
-        Passenger passengerInsertion = new Passenger(null, passenger.isSurvivedIndicator(), passenger.getPassengerClass(), passenger.getName(), passenger.getSex(), passenger.getAge(), passenger.getSiblingsAboard(), passenger.getParentsAboard(), passenger.getFare());
+        Passenger passengerInsertion = new Passenger(null, passenger.isSurvivedIndicator(), passenger.getPassengerClass(), passenger.getName(), passenger.getSex(), passenger.getAge(), passenger.getSiblingsAboard(), passenger.getParentsAboard(), BigDecimal.valueOf(passenger.getFare()).setScale(2, RoundingMode.HALF_UP).doubleValue());
         Passenger inserted = passengerRepository.save(passengerInsertion);
         passenger.setId(inserted.getId());
         return passenger;
