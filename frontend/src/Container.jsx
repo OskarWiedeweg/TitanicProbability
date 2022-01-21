@@ -9,9 +9,7 @@ export const Container = () => {
     const [ query, setQuery ] = useState({});
     const [ loaded, setLoading ] = useState(false);
     const [ passengers, setPassenger ] = useState({});
-
-
-    let limit = null;
+    const [ limit, setLimit ] = useState(null);
 
     const fetchData = () => {
 
@@ -24,11 +22,11 @@ export const Container = () => {
             }
         }
 
-        fetch("http://localhost:8080/api/passenger" + propertyString).then(res => res.json())
+        fetch("http://localhost:8080/api/passenger/all" + propertyString).then(res => res.json())
             .then((result) => {
                 if (result.length === 0 && page !== 0) {
                     setPage(page - 1);
-                    limit = page-1;
+                    setLimit(page-1);
                     return;
                 }
                 setPassenger(result);
@@ -76,10 +74,10 @@ export const Container = () => {
                     <span>Eltern</span>
                 </div>
                 {loaded && passengers.map(passenger => {
-                    return (<Passenger key={passenger.id} sex={passenger.sex} name={passenger.name} age={passenger.age}
+                    return (<Passenger key={passenger.id} id={passenger.id} sex={passenger.sex} name={passenger.name} age={passenger.age}
                                        survived={passenger.survivedIndicator} class={passenger.passengerClass}
                                        fare={passenger.fare} siblings={passenger.siblingsAboard}
-                                       parents={passenger.parentsAboard}/>)
+                                       parents={passenger.parentsAboard} fetchData={fetchData}/>)
                 })}
             </div>
         <PageControl page={page} pageUp={pageUp} pageDown={pageDown} limit={limit} />

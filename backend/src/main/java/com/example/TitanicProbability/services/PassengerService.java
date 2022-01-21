@@ -7,15 +7,13 @@ import com.example.TitanicProbability.helper.SpecificationHelper;
 import com.example.TitanicProbability.models.Passenger;
 import com.example.TitanicProbability.repositorys.PassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -52,35 +50,37 @@ public class PassengerService {
     }
 
     public PercentageDTO getPercentage(Boolean survivedIndicator, Integer passengerClass, String name, String sex, Double age, Integer siblingsAboard, Integer parentsAboard, Double fare) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Long> cq = criteriaBuilder.createQuery(Long.class);
-        cq.select(criteriaBuilder.count(cq.from(Passenger.class)));
-
-        Long passengerCount = entityManager.createQuery(cq).getSingleResult();
+        long passengerCount = passengerRepository.count();
 
 
-        Integer queryCount = getAllPassengersFilteredCount(survivedIndicator, passengerClass, name, sex, age, siblingsAboard, parentsAboard, fare);
+        Specification<Passenger> specification = SpecificationHelper.getSpecification(survivedIndicator, passengerClass, name, sex, age, siblingsAboard, parentsAboard, fare);
+        long queryCount = passengerRepository.count(specification);
 
-        return new PercentageDTO(passengerCount, (long)queryCount, new BigDecimal((queryCount * 1.0 / passengerCount) * 100).setScale(2, RoundingMode.HALF_UP).doubleValue() + "%");
+        return new PercentageDTO(passengerCount, queryCount, new BigDecimal((queryCount * 1.0 / passengerCount) * 100).setScale(2, RoundingMode.HALF_UP).doubleValue() + "%");
     }
 
     public AverageClassPriceDTO getAverageClassPrice(Integer passengerClass) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Double> cq = criteriaBuilder.createQuery(Double.class);
-        Root<Passenger> root = cq.from(Passenger.class);
-        cq.select(criteriaBuilder.sumAsDouble(root.get("fare")));
-        cq.where(criteriaBuilder.equal(root.get("passengerClass"), passengerClass));
 
-        Double fare = entityManager.createQuery(cq).getSingleResult();
+        Double fare = passengerRepository.getFare(passengerClass);
 
-        CriteriaBuilder cbPassengerCount = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Long> cqPassengerCount = cbPassengerCount.createQuery(Long.class);
-        Root<Passenger> rootPassengerCount = cqPassengerCount.from(Passenger.class);
-        cqPassengerCount.select(cbPassengerCount.count(rootPassengerCount));
-        cqPassengerCount.where(cbPassengerCount.equal(rootPassengerCount.get("passengerClass"), passengerClass));
-
-        Long passengerCount= entityManager.createQuery(cqPassengerCount).getSingleResult();
+        Long passengerCount = passengerRepository.count(Specification.where(SpecificationHelper.hasPassengerClass(passengerClass)));
 
         return new AverageClassPriceDTO(fare, passengerCount, new BigDecimal(fare / passengerCount).setScale(2, RoundingMode.HALF_UP).doubleValue());
+    }
+
+    public PassengerDTO createPassenger(PassengerDTO passenger) {
+        Passenger passengerInsertion = new Passenger(null, passenger.isSurvivedIndicator(), passenger.getPassengerClass(), passenger.getName(), passenger.getSex(), passenger.getAge(), passenger.getSiblingsAboard(), passenger.getParentsAboard(), passenger.getFare());
+        Passenger inserted = passengerRepository.save(passengerInsertion);
+        passenger.setId(inserted.getId());
+        return passenger;
+    }
+
+    public boolean deletePassenger(Long id) {
+        try {
+            passengerRepository.deleteById(id);
+        }catch (EmptyResultDataAccessException ignored) {
+            return false;
+        }
+        return true;
     }
 }

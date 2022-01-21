@@ -11,14 +11,14 @@ public class SpecificationHelper {
     public static Specification<Passenger> getSpecification(Boolean survivedIndicator, Integer passengerClass, String name, String sex, Double age, Integer siblingsAboard, Integer parentsAboard, Double fare) {
         List<Specification<Passenger>> specifications = new ArrayList<>();
 
-        if (survivedIndicator!=null) specifications.add(Specifications.isSurvived(survivedIndicator));
-        if (passengerClass!=null) specifications.add(Specifications.hasPassengerClass(passengerClass));
-        if (name!=null)specifications.add(Specifications.hasName(name));
-        if (sex!= null)specifications.add(Specifications.hasSex(sex));
-        if (age!=null)specifications.add(Specifications.hasAge(age));
-        if (siblingsAboard!=null)specifications.add(Specifications.hasSiblingsAboard(siblingsAboard));
-        if (parentsAboard!=null)specifications.add(Specifications.hasParentsAboard(parentsAboard));
-        if (fare!=null)specifications.add(Specifications.hasFare(fare));
+        if (survivedIndicator!=null) specifications.add(isSurvived(survivedIndicator));
+        if (passengerClass!=null) specifications.add(hasPassengerClass(passengerClass));
+        if (name!=null)specifications.add(hasName(name));
+        if (sex!= null)specifications.add(hasSex(sex));
+        if (age!=null)specifications.add(hasAge(age));
+        if (siblingsAboard!=null)specifications.add(hasSiblingsAboard(siblingsAboard));
+        if (parentsAboard!=null)specifications.add(hasParentsAboard(parentsAboard));
+        if (fare!=null)specifications.add(hasFare(fare));
 
         if (specifications.size() == 1) {
             return specifications.get(0);
@@ -31,5 +31,38 @@ public class SpecificationHelper {
             }
             return start;
         }
+    }
+
+
+    public static Specification<Passenger> isSurvived(boolean survived) {
+        return (passenger, cq, cb) -> cb.equal(passenger.get("survivedIndicator"), survived);
+    }
+
+    public static Specification<Passenger> hasPassengerClass(Integer passengerClass) {
+        return (passenger, cq, cb) -> cb.equal(passenger.get("passengerClass"), passengerClass);
+    }
+
+    public static Specification<Passenger> hasName(String name) {
+        return (passenger, cq, cb) -> cb.equal(passenger.get("name"), name);
+    }
+
+    public static Specification<Passenger> hasSex(String sex) {
+        return (passenger, cq, cb) -> cb.equal(passenger.get("sex"), sex);
+    }
+
+    public static Specification<Passenger> hasAge(Double age) {
+        return (passenger, cq, cb) -> cb.equal(passenger.get("age"), age);
+    }
+
+    public static Specification<Passenger> hasSiblingsAboard(Integer siblingsAboard) {
+        return (passenger, cq, cb) -> cb.equal(passenger.get("siblingsAboard"), siblingsAboard);
+    }
+
+    public static Specification<Passenger> hasParentsAboard(Integer parentsAboard) {
+        return (passenger, cq, cb) -> cb.equal(passenger.get("parentsAboard"), parentsAboard);
+    }
+
+    public static Specification<Passenger> hasFare(Double fare) {
+        return (passenger, cq, cb) -> cb.equal(passenger.get("fare"), fare);
     }
 }

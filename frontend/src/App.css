@@ -6,12 +6,59 @@
 .header {
     position: fixed;
     background: #00bcd4;
-    width: 100vw;
+    width: calc(100vw - 20px);
+    height: 60px;
     padding: 10px;
     top: 0;
     left: 0;
     right: 0;
     box-shadow: -5px 0 8px 0 #000000;
+    transition: all .9s;
+}
+
+.header.open {
+    height: 120px;
+}
+
+.header.open .login {
+    opacity: 1;
+    transition: opacity 2.5s;
+}
+
+.header .login {
+    opacity: 0;
+    transition: opacity .2s;
+    display: flex;
+    width: calc(100vw - 20px);
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.header .login input, .header .login button {
+    background: #00bcd4;
+    border: 1px solid white;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+    outline: none;
+    transition: all .6s;
+}
+
+.header .login button:hover {
+    background: white;
+    color: #00bcd4;
+}
+
+.header .login button {
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.header .navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .header h3 {
@@ -22,6 +69,12 @@
 
 .header h3 span {
     font-weight: 700;
+}
+
+.header span {
+    color: white;
+    padding-right: 20px;
+    cursor: pointer;
 }
 
 .container {
@@ -86,7 +139,7 @@
 
 .passenger {
     display: grid;
-    grid-template-columns: 40px 500px 80px 100px 100px auto 110px 80px;
+    grid-template-columns: 40px 500px 80px 100px 100px auto 110px 80px 50px;
     margin-bottom: 10px;
     font-size: 1.08rem;
 }
@@ -122,4 +175,8 @@
 
 .buttons span.secondary:hover {
     background: #717070;
+}
+
+.error {
+    color: red;
 }
