@@ -1,0 +1,125 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    position: fixed;
+    background: #00bcd4;
+    width: 100vw;
+    padding: 10px;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-shadow: -5px 0 8px 0 #000000;
+}
+
+.header h3 {
+    margin: 1em;
+    color: #fff;
+    font-weight: 400;
+}
+
+.header h3 span {
+    font-weight: 700;
+}
+
+.container {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    border-radius: 10px;
+    width: 80vw;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+}
+
+.passengers {
+
+}
+
+.titles {
+    font-weight: bold;
+}
+
+.pages {
+    display: flex;
+    justify-content: space-around;
+}
+
+.pages span {
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #00bcd4;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 700;
+    transition: background-color .6s;
+    cursor: pointer;
+}
+
+.query span {
+    height: 40px;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #00bcd4;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 700;
+    transition: background-color .6s;
+    cursor: pointer;
+}
+
+.pages span:hover, .query span:hover, .query button:hover {
+    background: #0097a8;
+}
+
+.hide {
+    visibility: hidden;
+}
+
+.passenger {
+    display: grid;
+    grid-template-columns: 40px 500px 80px 100px 100px auto 110px 80px;
+    margin-bottom: 10px;
+    font-size: 1.08rem;
+}
+
+.query {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+.buttons span {
+    margin-right: 10px;
+}
+
+.buttons span.secondary {
+    background: #929292;
+}
+
+.query button {
+    background: #00bcd4;
+    border: none;
+    color: white;
+    padding: 8px;
+    border-radius: 10px;
+    transition: background-color .6s;
+    cursor: pointer;
+}
+
+.buttons span.secondary:hover {
+    background: #717070;
+}
