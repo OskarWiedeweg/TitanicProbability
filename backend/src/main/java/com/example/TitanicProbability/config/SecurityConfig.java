@@ -3,6 +3,7 @@ package com.example.TitanicProbability.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -38,8 +39,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeRequests().antMatchers("/api/auth/**", "/api/passenger/all").permitAll().
-                anyRequest().authenticated();
+                .authorizeRequests().antMatchers("/api/auth/**", "/api/passenger/all", "/swagger-ui/**", "/api-docs/**").permitAll()
+                .and().authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .anyRequest().authenticated();
 
         // Add a filter to validate the tokens with every request
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

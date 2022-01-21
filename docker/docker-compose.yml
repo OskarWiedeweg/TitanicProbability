@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  titanic-db:
+    image: postgres:12.1
+    volumes:
+      - titanic-data:/var/lib/postgresql/titanic
+    environment:
+    - POSTGRES_USER=titanicuser
+    - POSTGRES_PASSWORD=password
+    - POSTGRES_DB=titanic
+    ports:
+    - "5432:5432"
+    networks: ["titanic"]
+  adminer:
+    image: adminer
+    restart: always
+    networks: ["titanic"]
+    ports:
+      - "8000:8080"
+
+volumes:
+  titanic-data:
+
+networks: {titanic: {}}

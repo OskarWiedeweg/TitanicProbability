@@ -74,10 +74,10 @@ export const Container = () => {
                     <span>Eltern</span>
                 </div>
                 {loaded && passengers.map(passenger => {
-                    return (<Passenger key={passenger.id} sex={passenger.sex} name={passenger.name} age={passenger.age}
+                    return (<Passenger key={passenger.id} id={passenger.id} sex={passenger.sex} name={passenger.name} age={passenger.age}
                                        survived={passenger.survivedIndicator} class={passenger.passengerClass}
                                        fare={passenger.fare} siblings={passenger.siblingsAboard}
-                                       parents={passenger.parentsAboard}/>)
+                                       parents={passenger.parentsAboard} fetchData={fetchData}/>)
                 })}
             </div>
         <PageControl page={page} pageUp={pageUp} pageDown={pageDown} limit={limit} />

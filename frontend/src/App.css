@@ -139,7 +139,7 @@
 
 .passenger {
     display: grid;
-    grid-template-columns: 40px 500px 80px 100px 100px auto 110px 80px;
+    grid-template-columns: 40px 500px 80px 100px 100px auto 110px 80px 50px;
     margin-bottom: 10px;
     font-size: 1.08rem;
 }
